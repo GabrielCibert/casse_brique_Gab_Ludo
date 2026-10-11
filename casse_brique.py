@@ -1,4 +1,0 @@
-"""
-Programme du Casse Briques
-
-"""
