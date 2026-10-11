@@ -4,39 +4,16 @@ Fait par Gabriel CIBERT et Ludivic ANDERSON
 Commencé le 06/10/2026
 Reste à faire : - faire en sorte que la colision balle-raquette se fasse bien 
 - transformer le programme en Programation Orientée Objet avec des classes
+- faire les briques cassables
 
 """
 
-from tkinter import Tk, Button, Canvas, LEFT
+from tkinter import Tk, Button, Canvas, LEFT, NW, PhotoImage
 import random
 import math
 
 
-
-# direction initiale aléatoire
-vitesse = random.uniform(1.8, 2) * 5
-angle = random.uniform(math.pi,  2 * math.pi)
-# angle = 0
-
-DX = vitesse * math.cos(angle)
-DY = vitesse * math.sin(angle)
-
-# Dimension de la fenetre
-LARGEUR = 750 
-HAUTEUR = 600
-
-# rayon de la balle
-RAYON = 15  
-
-# Position initiale de la raquette
-PosX = 375
-PosY = 575
-
-
-
-# position initiale de la balle : au milieu
-X = LARGEUR / 2
-Y = 554
+#FONCTIONS
 
 def déplacement():
     #Déplacement de la balle
@@ -61,6 +38,11 @@ def déplacement():
     # rebond en haut
     if Y - RAYON + DY < 0:
         Y = 2 * RAYON - Y
+        DY = -DY
+
+    #rebond sur la raquette
+    if Y + RAYON + DY == canvas.coords(Raquette):
+        Y = 2 * (HAUTEUR - RAYON) - Y    
         DY = -DY
 
     X = X + DX
@@ -89,30 +71,64 @@ def clavier(event):
 
     # déplacement vers la droite
     if touche == 'd':
-        PosX += 20
+        PosX += 50
 
     # déplacement vers la gauche
     if touche == 'q':
-        PosX -= 20
+        PosX -= 50
 
     # on dessine la raquette à sa nouvelle position
-    canvas.coords(Raquette, PosX - 30, PosY - 5, PosX + 30, PosY + 5) 
+    canvas.coords(Raquette, PosX - 50, PosY - 5, PosX + 50, PosY + 5) 
 
+
+
+
+
+#PROGRAMME PRINCIPAL
+
+# direction initiale aléatoire
+vitesse = random.uniform(1.8, 2) * 5
+angle = random.uniform(math.pi,  2 * math.pi)
+# angle = 0
+
+DX = vitesse * math.cos(angle)
+DY = vitesse * math.sin(angle)
+
+# Dimension de la fenetre
+LARGEUR = 1350
+HAUTEUR = 898
+
+# rayon de la balle
+RAYON = 10  
+
+# Position initiale de la raquette
+PosX = LARGEUR / 2
+PosY = 875
+
+# position initiale de la balle : au milieu
+X = LARGEUR / 2
+Y = 860
 
 # Création de la fenêtre principale (main window)
 Mafenetre = Tk()
+Mafenetre.geometry('1370x960+160+0')
 Mafenetre.title('Casse brique')
 
 # Création d'un widget Canvas (zone graphique)
 canvas = Canvas(Mafenetre, width = LARGEUR, height = HAUTEUR, bg = 'white')
 canvas.pack(padx = 5, pady = 5)
 
+#Image d'arrière plan
+image1 = PhotoImage(file = "casse_brique1.ppm")
+canvas.create_image(0 , 0 , anchor = NW , image = image1)
+canvas.image = image1
+
 # Création du pion
-Raquette = canvas.create_rectangle( PosX - 30, PosY - 5, PosX + 30, PosY + 5, outline = 'black', fill = 'red' )
+Raquette = canvas.create_rectangle( PosX - 50, PosY - 5, PosX + 50, PosY + 5, outline = 'black', fill = 'red' )
 
 
 # Création d'un objet graphique
-Balle = canvas.create_oval( X-RAYON, Y-RAYON, X+RAYON, Y+RAYON, width = 1, outline = 'black', fill = 'blue')
+Balle = canvas.create_oval( X-RAYON, Y-RAYON, X+RAYON, Y+RAYON, width = 1, outline = 'black', fill = 'yellow')
 
 # Permet au Canvas de recevoir les touches du clavier
 canvas.focus_set()
