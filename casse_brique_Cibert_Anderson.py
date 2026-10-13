@@ -3,9 +3,6 @@ Programme de jeu du casse-brique
 Fait par Gabriel CIBERT et Ludivic ANDERSON
 Commencé le 06/10/2026
 Reste à faire : - faire en sorte que la colision balle-raquette se fasse bien 
-- transformer le programme en Programation Orientée Objet avec des classes
-- faire les briques cassables
-
 """
 
 from tkinter import Tk, Button, Canvas, LEFT, NW, PhotoImage
