@@ -17,7 +17,7 @@ import math
 
 def déplacement():
     #Déplacement de la balle
-    global X, Y, DX, DY, RAYON, LARGEUR, HAUTEUR
+    global X, Y, DX, DY, RAYON, LARGEUR, HAUTEUR, en_cours
 
     # rebond à droite
     if X + RAYON + DX > LARGEUR:
@@ -31,9 +31,17 @@ def déplacement():
 
     #  pas de rebond en bas
     if Y + RAYON + DY > HAUTEUR:
-        return Mafenetre.destroy
-       # Y = 2 * (HAUTEUR - RAYON) - Y     --> rebond du bas 
-       # DY = -DY
+        X = PosX                 
+        Y = PosY - 5 - RAYON     
+        vitesse = random.uniform(1.8, 2) * 5
+        angle = random.uniform(1.2 * math.pi , 1.8 * math.pi)  
+        DX = vitesse * math.cos(angle)
+        DY = vitesse * math.sin(angle)
+        canvas.coords(Balle, X-RAYON, Y-RAYON, X+RAYON, Y+RAYON)
+        en_cours = False
+        return
+    X = X + DX
+    Y = Y + DY
 
     # rebond en haut
     if Y - RAYON + DY < 0:
@@ -41,18 +49,21 @@ def déplacement():
         DY = -DY
 
     #rebond sur la raquette
-    if Y + RAYON + DY == canvas.coords(Raquette):
-        Y = 2 * (HAUTEUR - RAYON) - Y    
-        DY = -DY
 
-    X = X + DX
-    Y = Y + DY
+          
 
     # affichage
     canvas.coords(Balle, X-RAYON, Y-RAYON, X+RAYON, Y+RAYON)
 
     # mise à jour toutes les 20 ms
     Mafenetre.after(20, déplacement)
+
+
+def go():
+    global en_cours
+    if not en_cours:
+        en_cours = True
+        déplacement()
 
 # Gestion de l'événement : appui sur une touche du clavier
 def clavier(event):
@@ -82,36 +93,34 @@ def clavier(event):
 
 
 
-
-
 #PROGRAMME PRINCIPAL
 
 # direction initiale aléatoire
-vitesse = random.uniform(1.8, 2) * 5
-angle = random.uniform(math.pi,  2 * math.pi)
+vitesse = random.uniform(1.8, 2) * 7
+angle = random.uniform(1.2 * math.pi,  1.8 * math.pi)
 # angle = 0
 
 DX = vitesse * math.cos(angle)
 DY = vitesse * math.sin(angle)
 
 # Dimension de la fenetre
-LARGEUR = 1350
-HAUTEUR = 898
+LARGEUR = 1000
+HAUTEUR = 700
 
 # rayon de la balle
 RAYON = 10  
 
 # Position initiale de la raquette
 PosX = LARGEUR / 2
-PosY = 875
+PosY = 675
 
 # position initiale de la balle : au milieu
 X = LARGEUR / 2
-Y = 860
+Y = 660
 
 # Création de la fenêtre principale (main window)
 Mafenetre = Tk()
-Mafenetre.geometry('1370x960+160+0')
+Mafenetre.geometry('1000x800+160+0')
 Mafenetre.title('Casse brique')
 
 # Création d'un widget Canvas (zone graphique)
@@ -119,16 +128,17 @@ canvas = Canvas(Mafenetre, width = LARGEUR, height = HAUTEUR, bg = 'white')
 canvas.pack(padx = 5, pady = 5)
 
 #Image d'arrière plan
-image1 = PhotoImage(file = "casse_brique1.ppm")
-canvas.create_image(0 , 0 , anchor = NW , image = image1)
-canvas.image = image1
+#image1 = PhotoImage(file = "casse_brique1.ppm")
+#canvas.create_image(0 , 0 , anchor = NW , image = image1)
+#canvas.image = image1
 
-# Création du pion
+# Création de la raquette
 Raquette = canvas.create_rectangle( PosX - 50, PosY - 5, PosX + 50, PosY + 5, outline = 'black', fill = 'red' )
 
 
-# Création d'un objet graphique
-Balle = canvas.create_oval( X-RAYON, Y-RAYON, X+RAYON, Y+RAYON, width = 1, outline = 'black', fill = 'yellow')
+# Création de la balle
+Balle = canvas.create_oval(X-RAYON, Y-RAYON, X+RAYON, Y+RAYON, width = 1, outline = 'black', fill = 'yellow')
+
 
 # Permet au Canvas de recevoir les touches du clavier
 canvas.focus_set()
@@ -137,13 +147,16 @@ canvas.bind('<Key>', clavier)
 
 
 # Création d'un widget Button (bouton Go)
-BoutonGo = Button(Mafenetre, text = 'Go', command = déplacement)
+BoutonGo = Button(Mafenetre, text = 'Go', command = go)
 BoutonGo.pack(side = LEFT, padx = 10, pady = 10)
 
 
 # Création d'un widget Button
 BoutonQuitter = Button(Mafenetre, text = 'Quitter', command = Mafenetre.destroy)
-BoutonQuitter.pack(side=LEFT, padx=5, pady=5)
+BoutonQuitter.pack(side = LEFT, padx = 5, pady = 5)
+
+# Initialisation de en_cours à False
+en_cours = False
 
 
 Mafenetre.mainloop()
