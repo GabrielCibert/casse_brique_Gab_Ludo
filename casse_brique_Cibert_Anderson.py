@@ -1,6 +1,6 @@
 """
 Programme de jeu du casse-brique
-Fait par Gabriel CIBERT et Ludivic ANDERSON
+Fait par Gabriel CIBERT et Ludovic ANDERSON
 Commencé le 06/10/2026
 Reste à faire : - faire en sorte que la colision balle-raquette se fasse bien 
 """
@@ -73,7 +73,23 @@ def déplacement():
             # une seule brique cassée par déplacement
             break
 
-          
+
+    x1, y1, x2, y2 = canvas.coords(Raquette)
+ 
+    # la balle touche-t-elle la brique ?
+    if NX + RAYON > x1 and NX - RAYON < x2 and NY + RAYON > y1 and NY - RAYON < y2:
+ 
+    # si la balle était à côté de la brique : rebond horizontal
+        if X + RAYON <= x1 or X - RAYON >= x2:
+            DX = -DX
+        # sinon elle venait du dessus ou du dessous : rebond vertical
+        else:
+            DY = -DY
+
+
+ 
+
+
 
     # affichage
     canvas.coords(Balle, X-RAYON, Y-RAYON, X+RAYON, Y+RAYON)
@@ -151,9 +167,9 @@ canvas = Canvas(Mafenetre, width = LARGEUR, height = HAUTEUR, bg = 'white')
 canvas.pack(padx = 5, pady = 5)
 
 #Image d'arrière plan
-image1 = PhotoImage(file = "casse_brique1.ppm")
-canvas.create_image(0 , 0 , anchor = NW , image = image1)
-canvas.image = image1
+#image1 = PhotoImage(file = "casse_brique1.ppm")
+#canvas.create_image(0 , 0 , anchor = NW , image = image1)
+#canvas.image = image1
 
 # Création de la raquette
 Raquette = canvas.create_rectangle( PosX - 50, PosY - 5, PosX + 50, PosY + 5, outline = 'black', fill = 'red' )
