@@ -10,9 +10,7 @@ class Brique:
 
     def __init__(self, canvas, centre_x, centre_y):
         self.canvas = canvas
-        self.id = canvas.create_rectangle(centre_x - 45, centre_y - 13,
-                                          centre_x + 45, centre_y + 13,
-                                          outline = 'black', fill = 'blue')
+        self.id = canvas.create_rectangle(centre_x - 45, centre_y - 13, centre_x + 45, centre_y + 13, outline = 'black', fill = 'blue')
 
     def coords(self):
         return self.canvas.coords(self.id)
