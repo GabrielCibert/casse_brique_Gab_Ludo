@@ -6,6 +6,7 @@ Reste à faire : TOUT !!!
 '''
 
 from tkinter import Tk, Button, Canvas, LEFT, NW, PhotoImage, Label, Menu, Frame
+from classe_jeu import Jeu
 
 # Fenêtre du menu
 Menu_principal = Tk()
@@ -58,6 +59,8 @@ image1 = PhotoImage(file = "photo_menu_casse_brique.ppm")
 canvas_menu.create_image(0 , 0 , anchor = NW , image = image1)
 canvas_menu.image = image1
 
+if __name__ == '__main__':
+    Jeu().lancer()
 
 
 #Menu_principal.config(menu = menu_aide)
